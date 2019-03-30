@@ -1,28 +1,32 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Map from './map/Map';
+import web3 from './web3';
+import Login from './auth/login';
+import Signup from './auth/signup';
+import { Router } from '@reach/router';
+import Order from './order/order';
 
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
-  }
+	async componentDidMount() {
+		await window.ethereum.enable();
+	}
+	render() {
+		return (
+			<div>
+				<Router>
+					<Map
+						center={{ lat: 18.5204, lng: 73.8567 }}
+						height="300px"
+						zoom={15}
+						path="/"
+					/>
+					<Login path="/login" />
+					<Signup path="/signup" />
+					<Order path="/order" />
+				</Router>
+			</div>
+		);
+	}
 }
 
 export default App;

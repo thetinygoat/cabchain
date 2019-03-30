@@ -3,15 +3,26 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@reach/router": "^1.2.1",
+    "axios": "^0.18.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "react-scripts": "2.1.8"
+    "react-geocode": "^0.1.2",
+    "react-google-autocomplete": "^1.0.18",
+    "react-google-maps": "^9.4.5",
+    "react-redux": "^6.0.1",
+    "react-scripts": "2.1.8",
+    "recompose": "^0.30.0",
+    "redux": "^4.0.1",
+    "styled-components": "^4.2.0",
+    "web3": "1.0.0-beta.37"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "now-build": "react-scripts build"
   },
   "eslintConfig": {
     "extends": "react-app"
