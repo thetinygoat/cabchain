@@ -90,9 +90,9 @@ export class order extends Component {
 	}
 	handleClick = async coins => {
 		console.log(coins);
-
+		parseFloat(this.state.distance.replace(/,/g, ''));
 		const amount = web3.utils.toBN(
-			Math.floor(coins * parseFloat(this.state.distance))
+			Math.floor(coins * parseFloat(this.state.distance.replace(/,/g, '')))
 		);
 		const decimals = web3.utils.toBN(8);
 		let value =
