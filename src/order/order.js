@@ -57,13 +57,16 @@ export class order extends Component {
 		distance: '',
 		error: null,
 		loading: true,
-		thash: ''
+		thash: '',
+		account: null
 	};
 	async componentDidMount() {
 		const qparams = this.props.location.search.split('&');
 		const origin = qparams[0].split('=');
 		const dest = qparams[1].split('=');
 		let data;
+		const accounts = await web3.eth.getAccounts();
+		this.setState({ account: accounts[0] });
 		try {
 			data = await axios.post(
 				'https://polar-taiga-59579.herokuapp.com/api/get/journey',
@@ -100,7 +103,7 @@ export class order extends Component {
 			'0x' + amount.mul(web3.utils.toBN(10).pow(decimals)).toString('hex');
 		await cabchain.methods
 			.transfer('0x1Fa94B56255F980Ff40D116c45B1E7B443c7f042', value)
-			.send({ from: '0x3e5fba3319Fb8e764d10C22b05ea064A395DE2a4' })
+			.send({ from: this.state.account })
 			.on('transactionHash', hash => {
 				this.setState({ thash: hash });
 			});
@@ -127,7 +130,7 @@ export class order extends Component {
 							<Notification
 								style={{ backgroundColor: 'green', fontSize: '.8em' }}
 							>
-								transaction successful, transactionId:
+								transactionId:
 								<em>{this.state.thash}</em>
 							</Notification>
 						)}
