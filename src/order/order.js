@@ -6,6 +6,7 @@ import Notification from '../common/notification';
 import styled from 'styled-components';
 import Spinner from '../common/spinner/spinner';
 import driver from '../driver.svg';
+import confirm from '../confirm.svg';
 const Databoard = styled.div`
 	box-shadow: 0 0 7px 1px #212121;
 	display: flex;
@@ -58,7 +59,9 @@ export class order extends Component {
 		error: null,
 		loading: true,
 		thash: '',
-		account: null
+		account: null,
+		successful: false,
+		sendingTransaction: false
 	};
 	async componentDidMount() {
 		const qparams = this.props.location.search.split('&');
@@ -101,12 +104,20 @@ export class order extends Component {
 		const decimals = web3.utils.toBN(8);
 		let value =
 			'0x' + amount.mul(web3.utils.toBN(10).pow(decimals)).toString('hex');
-		await cabchain.methods
-			.transfer('0x1Fa94B56255F980Ff40D116c45B1E7B443c7f042', value)
-			.send({ from: this.state.account })
-			.on('transactionHash', hash => {
-				this.setState({ thash: hash });
-			});
+		try {
+			this.setState({ loading: true });
+			let resp = await cabchain.methods
+				.transfer('0x1Fa94B56255F980Ff40D116c45B1E7B443c7f042', value)
+				.send({ from: this.state.account })
+				.on('transactionHash', hash => {
+					this.setState({ thash: hash });
+				});
+			if (resp) {
+				this.setState({ successful: true, loading: false });
+			}
+		} catch (err) {
+			console.log(err);
+		}
 	};
 	render() {
 		return (
@@ -126,7 +137,7 @@ export class order extends Component {
 								No route found!!
 							</Notification>
 						)}
-						{this.state.thash && (
+						{this.state.successful && (
 							<Notification
 								style={{ backgroundColor: 'green', fontSize: '.8em' }}
 							>
@@ -134,63 +145,67 @@ export class order extends Component {
 								<em>{this.state.thash}</em>
 							</Notification>
 						)}
-						{this.state.distance && (
-							<React.Fragment>
-								<Databoard>
-									<h2
-										style={{
-											display: 'flex',
-											alignItems: 'center',
-											justifyContent: 'space-between'
-										}}
-									>
-										<i class="material-icons">directions_car</i>
-										{this.state.distance}
-									</h2>
-									<h2
-										style={{
-											display: 'flex',
-											alignItems: 'center',
-											justifyContent: 'space-between'
-										}}
-									>
-										<i class="material-icons">access_time</i>
-										{this.state.time}
-									</h2>
-								</Databoard>
-								<Rideboard>
-									<Logo src={driver} />
-									<div style={{ width: '70%' }}>
-										<RideInfo>
-											<div>
-												<h3>John Wick</h3>
-												<p>DL8GH780</p>
-											</div>
-											<RideButton onClick={() => this.handleClick(15.5)}>
-												<i class="material-icons">attach_money</i> 15.5/ Km
-											</RideButton>
-										</RideInfo>
-										<RideInfo>
-											<div>
-												<h3>Chris Evans</h3>
-												<p>DL8UJ8508</p>
-											</div>
-											<RideButton onClick={() => this.handleClick(18.6)}>
-												<i class="material-icons">attach_money</i> 18.6 / Km
-											</RideButton>
-										</RideInfo>
-										<RideInfo>
-											<div>
-												<h3>John Doe</h3>
-												<p>DL8CJ9898</p>
-											</div>
-											<RideButton onClick={() => this.handleClick(21.3)}>
-												<i class="material-icons">attach_money</i> 21.3 / Km
-											</RideButton>
-										</RideInfo>
-									</div>
-								</Rideboard>
-							</React.Fragment>
+						{!this.state.successful ? (
+							this.state.distance && (
+								<React.Fragment>
+									<Databoard>
+										<h2
+											style={{
+												display: 'flex',
+												alignItems: 'center',
+												justifyContent: 'space-between'
+											}}
+										>
+											<i class="material-icons">directions_car</i>
+											{this.state.distance}
+										</h2>
+										<h2
+											style={{
+												display: 'flex',
+												alignItems: 'center',
+												justifyContent: 'space-between'
+											}}
+										>
+											<i class="material-icons">access_time</i>
+											{this.state.time}
+										</h2>
+									</Databoard>
+									<Rideboard>
+										<Logo src={driver} />
+										<div style={{ width: '70%' }}>
+											<RideInfo>
+												<div>
+													<h3>John Wick</h3>
+													<p>DL8GH780</p>
+												</div>
+												<RideButton onClick={() => this.handleClick(15.5)}>
+													<i class="material-icons">attach_money</i> 15.5/ Km
+												</RideButton>
+											</RideInfo>
+											<RideInfo>
+												<div>
+													<h3>Chris Evans</h3>
+													<p>DL8UJ8508</p>
+												</div>
+												<RideButton onClick={() => this.handleClick(18.6)}>
+													<i class="material-icons">attach_money</i> 18.6 / Km
+												</RideButton>
+											</RideInfo>
+											<RideInfo>
+												<div>
+													<h3>John Doe</h3>
+													<p>DL8CJ9898</p>
+												</div>
+												<RideButton onClick={() => this.handleClick(21.3)}>
+													<i class="material-icons">attach_money</i> 21.3 / Km
+												</RideButton>
+											</RideInfo>
+										</div>
+									</Rideboard>
+								</React.Fragment>
+							)
+						) : (
+							<Logo src={confirm} />
 						)}
 					</React.Fragment>
 				) : (
