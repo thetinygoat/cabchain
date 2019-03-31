@@ -5,6 +5,7 @@ import Login from './auth/login';
 import Signup from './auth/signup';
 import { Router } from '@reach/router';
 import Order from './order/order';
+import Autocomplete from './autocomplete/autocomplete';
 
 class App extends Component {
 	async componentDidMount() {
@@ -14,12 +15,13 @@ class App extends Component {
 		return (
 			<div>
 				<Router>
-					<Map
+					{/* <Map
 						center={{ lat: 18.5204, lng: 73.8567 }}
 						height="300px"
 						zoom={15}
 						path="/"
-					/>
+					/> */}
+					<Autocomplete path="/" />
 					<Login path="/login" />
 					<Signup path="/signup" />
 					<Order path="/order" />

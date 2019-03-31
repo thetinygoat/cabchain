@@ -5,28 +5,32 @@ import web3 from '../web3';
 import Notification from '../common/notification';
 import styled from 'styled-components';
 import Spinner from '../common/spinner/spinner';
+import driver from '../driver.svg';
 const Databoard = styled.div`
-	box-shadow: 0 0 10px 1px #e0e0e0;
+	box-shadow: 0 0 7px 1px #212121;
 	display: flex;
 	width: 50%;
 	padding: 1em;
 	margin: 1em;
 	border-radius: 2px;
+	background-color: #424242;
 	justify-content: space-around;
 `;
 const Rideboard = styled.div`
-	width: 60%;
+	width: 80%;
 	display: flex;
 	margin: 1em auto;
-	flex-direction: column;
+	align-items: center;
+	// flex-direction: column;
 `;
 const RideInfo = styled.div`
-	box-shadow: 0 0 7px 1px #e0e0e0;
+	box-shadow: 0 0 7px 1px #212121;
 	display: flex;
 	width: 50%;
 	padding: 1em;
 	margin: 1em auto;
 	border-radius: 2px;
+	background-color: #424242;
 	justify-content: space-around;
 	align-items: center;
 `;
@@ -41,6 +45,9 @@ const RideButton = styled.button`
 	cursor: pointer;
 	display: flex;
 	align-items: center;
+`;
+const Logo = styled.img`
+	width: 35%;
 `;
 export class order extends Component {
 	state = {
@@ -57,10 +64,13 @@ export class order extends Component {
 		const dest = qparams[1].split('=');
 		let data;
 		try {
-			data = await axios.post('http://localhost:8080/api/get/journey', {
-				origin: origin[1],
-				destination: dest[1]
-			});
+			data = await axios.post(
+				'https://polar-taiga-59579.herokuapp.com/api/get/journey',
+				{
+					origin: origin[1],
+					destination: dest[1]
+				}
+			);
 			if (data.data) {
 				this.setState({ loading: false });
 			}
@@ -137,33 +147,36 @@ export class order extends Component {
 									</h2>
 								</Databoard>
 								<Rideboard>
-									<RideInfo>
-										<div>
-											<h3>John Wick</h3>
-											<p>DL8GH780</p>
-										</div>
-										<RideButton onClick={() => this.handleClick(15.5)}>
-											<i class="material-icons">attach_money</i> 15.5/ Km
-										</RideButton>
-									</RideInfo>
-									<RideInfo>
-										<div>
-											<h3>Chris Evans</h3>
-											<p>DL8UJ8508</p>
-										</div>
-										<RideButton onClick={() => this.handleClick(18.6)}>
-											<i class="material-icons">attach_money</i> 18.6 / Km
-										</RideButton>
-									</RideInfo>
-									<RideInfo>
-										<div>
-											<h3>John Doe</h3>
-											<p>DL8CJ9898</p>
-										</div>
-										<RideButton onClick={() => this.handleClick(21.3)}>
-											<i class="material-icons">attach_money</i> 21.3 / Km
-										</RideButton>
-									</RideInfo>
+									<Logo src={driver} />
+									<div style={{ width: '70%' }}>
+										<RideInfo>
+											<div>
+												<h3>John Wick</h3>
+												<p>DL8GH780</p>
+											</div>
+											<RideButton onClick={() => this.handleClick(15.5)}>
+												<i class="material-icons">attach_money</i> 15.5/ Km
+											</RideButton>
+										</RideInfo>
+										<RideInfo>
+											<div>
+												<h3>Chris Evans</h3>
+												<p>DL8UJ8508</p>
+											</div>
+											<RideButton onClick={() => this.handleClick(18.6)}>
+												<i class="material-icons">attach_money</i> 18.6 / Km
+											</RideButton>
+										</RideInfo>
+										<RideInfo>
+											<div>
+												<h3>John Doe</h3>
+												<p>DL8CJ9898</p>
+											</div>
+											<RideButton onClick={() => this.handleClick(21.3)}>
+												<i class="material-icons">attach_money</i> 21.3 / Km
+											</RideButton>
+										</RideInfo>
+									</div>
 								</Rideboard>
 							</React.Fragment>
 						)}
