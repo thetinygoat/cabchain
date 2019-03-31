@@ -56,7 +56,8 @@ export class order extends Component {
 		time: '',
 		distance: '',
 		error: null,
-		loading: true
+		loading: true,
+		thash: ''
 	};
 	async componentDidMount() {
 		const qparams = this.props.location.search.split('&');
@@ -101,7 +102,7 @@ export class order extends Component {
 			.transfer('0x1Fa94B56255F980Ff40D116c45B1E7B443c7f042', value)
 			.send({ from: '0x3e5fba3319Fb8e764d10C22b05ea064A395DE2a4' })
 			.on('transactionHash', hash => {
-				console.log(hash);
+				this.setState({ thash: hash });
 			});
 	};
 	render() {
@@ -120,6 +121,14 @@ export class order extends Component {
 						{this.state.error === 'NO_ROUTE' && (
 							<Notification style={{ color: '#fff' }}>
 								No route found!!
+							</Notification>
+						)}
+						{this.state.thash && (
+							<Notification
+								style={{ backgroundColor: 'green', fontSize: '.8em' }}
+							>
+								transaction successful, transactionId:
+								<em>{this.state.thash}</em>
 							</Notification>
 						)}
 						{this.state.distance && (
